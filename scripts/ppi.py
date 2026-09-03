@@ -51,4 +51,4 @@ with open(".gitignore", "w") as f:
 # Finally, run `git init` in the directory and upload the initial commit
 os.system("git init")
 os.system("git add *")
-os.system("git commit -m 'Initial commit'")
+os.system("git commit -m 'chore: Initial commit'")
