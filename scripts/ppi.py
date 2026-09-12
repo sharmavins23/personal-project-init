@@ -1,4 +1,5 @@
 import os
+import subprocess
 import time
 
 
@@ -48,7 +49,11 @@ with open(".gitignore", "w") as f:
     with open(f"{program_path}/data/.gitignore", "r") as data:
         f.write(data.read())
 
-# Finally, run `git init` in the directory and upload the initial commit
-os.system("git init")
-os.system("git add *")
-os.system("git commit -m 'chore: Initial commit'")
+# Finally, run `git init` in the directory and upload the initial commit.
+# Use subprocess with argument lists instead of os.system + shell strings:
+# cmd.exe does not honor single quotes, so the "-m 'chore: Initial commit'"
+# string was split into spurious pathspecs and the commit always failed.
+# Passing args as a list leaves no room for shell quoting mangling.
+subprocess.run(["git", "init"])
+subprocess.run(["git", "add", "-A"])
+subprocess.run(["git", "commit", "-m", "chore: Initial commit"])
