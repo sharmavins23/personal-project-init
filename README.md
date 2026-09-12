@@ -23,6 +23,15 @@ python <path>personal-project-init\scripts\ppi.py
 
 This `/bin/` folder is added to my PATH environment variable.
 
+## TODO (So I don't forget!)
+
+- Migrate to Rust.
+    - Remove all of the `allow` macros!
+- Harden the existing functionality.
+    - The current implementation is not very robust; It would be nicer to
+      robustly handle certain cases (e.g. items are already defined, licenses
+      are already populated).
+
 # License TL;DR
 
 This project is distributed under the MIT license. This is a paraphrasing of a
