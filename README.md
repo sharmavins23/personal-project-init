@@ -1,20 +1,21 @@
 # Personal Project Initializer
 
-Every time I make a new project I have to go through the following steps:
+Every time I make a new project I have to go through the following steps (or
+similar):
 
-```
+```zsh
 $ git init
 $ touch README.md
-  # Add in README name and MIT License TL;DR
+# Manually add in README name...
+# Manually add in license TL;DR...
 $ touch LICENSE.md
-  # Add in license text
+# Manually add in license text...
 ```
 
 This project automates that process to one singular command, `ppi`, in the
 terminal.
 
-Within the `/bin/` folder (which is cloaked from git) I have the following batch
-file:
+Within the `/bin/` folder I have the following batch file:
 
 ```batch
 @echo off
