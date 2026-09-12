@@ -1,10 +1,20 @@
 //! Contains accessors for filesystem access.
 
-pub(in crate::system_accessors::filesystem_accessors) mod filesystem_errors;
+// ===== Accessors =============================================================
 
 pub(crate) mod read_file;
 #[allow(unused_imports)]
-pub(crate) use read_file::run;
+pub(crate) use read_file::read_file;
+
+pub(crate) mod write_file;
+#[allow(unused_imports)]
+pub(crate) use write_file::write_file;
+
+// ===== Helpers ===============================================================
+
+pub(in crate::system_accessors::filesystem_accessors) mod filesystem_errors;
+
+// ===== Test Support ==========================================================
 
 #[cfg(test)]
 pub(in crate::system_accessors::filesystem_accessors) mod test_support;

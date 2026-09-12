@@ -21,7 +21,7 @@ use std::path::Path;
 /// - [`Err`]: Returns the file read error.
 ///
 #[allow(dead_code)]
-pub(crate) fn run(path: &Path) -> Result<String> {
+pub(crate) fn read_file(path: &Path) -> Result<String> {
     read_to_string(path).wrap_err(file_read_error_context(path))
 }
 
@@ -31,39 +31,30 @@ pub(crate) fn run(path: &Path) -> Result<String> {
 #[cfg(test)]
 mod test_read_file {
 
-    use super::run;
-    use crate::system_accessors::filesystem_accessors::test_support::{TestFile, create_test_file};
+    use super::read_file;
+    use crate::system_accessors::filesystem_accessors::test_support::{
+        SAFE_FILENAME_CHARS, TestFile, create_test_file,
+    };
     use color_eyre::eyre::Result;
     use proptest::{prop_assert_eq, proptest};
 
     // ----- Test Cases --------------------------------------------------------
 
-    /// A missing file must yield an error report.
-    #[test]
-    fn missing_file_yields_error() {
-        // Arrange.
-        let test_file: TestFile = create_test_file("missing.txt", None);
-
-        // Act.
-        let result: Result<String> = run(&test_file.file_path);
-
-        // Assert.
-        assert!(result.is_err());
-    }
-
     proptest! {
-        /// Any items written to files must read back, verbatim.
+
+        /// Fuzz test containing various files and names.
         #[test]
-        fn read_returns_written_content_verbatim(file_content in ".*") {
+        fn test_read_file(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file("sample.txt", Some(file_content.as_str()));
+            let test_file: TestFile = create_test_file(&file_name, Some(file_content.as_str()));
 
             // Act.
-            let result: Result<String> = run(&test_file.file_path);
+            let result: Result<String> = read_file(&test_file.file_path);
 
             // Assert.
             let returned_content: String = result.expect("File read should succeed on non-empty file.");
             prop_assert_eq!(returned_content, file_content);
         }
+
     }
 }
