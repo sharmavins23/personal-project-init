@@ -1,0 +1,36 @@
+# Rust project-level configurations.
+
+[lints.clippy]
+nursery = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+# Configurations for Clippy (linting).
+arithmetic_side_effects = "deny"     # Disallows arithmetic that may overflow/panic.
+as_conversions = "deny"              # Disallows `as` casts.
+exit = "deny"                        # Disallows std::process::exit.
+expect_used = "deny"                 # Disallows `.expect()`.
+indexing_slicing = "deny"            # Disallows `v[i]` indexing.
+panic = "deny"                       # Disallows the `panic!` macro.
+panic_in_result_fn = "deny"          # Disallows `panic!` inside Result-returning functions.
+string_slice = "deny"                # Disallows byte-indexing strings.
+todo = "deny"                        # Disallows `todo!()`.
+unchecked_time_subtraction = "deny"  # Disallows subtracting time values.
+unimplemented = "deny"               # Disallows `unimplemented!()`.
+unreachable = "deny"                 # Disallows `unreachable!()`.
+unwrap_used = "deny"                 # Disallows `.unwrap()`.
+
+[package]
+description = "Boilerplate project initializer."
+edition = "2024"
+license = "MIT"
+name = "ppi"
+version = "0.1.0"
+
+[profile.release]
+# Configure optimizations for the release profile.
+lto = "fat"       # Performs "fat" link-time optimizations.
+opt-level = 3     # Enable all compiler optimizations.
+strip = "symbols" # Strip symbols from the compiled binary.
+
+[dependencies]
+clap = "4.6.6"
+color-eyre = "0.6.5"

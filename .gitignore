@@ -1,3 +1,9 @@
-.bin
-.vscode
+# Build files
+target
 __pycache__
+
+# Editor files
+.vscode
+
+# Operating system files
+.bin

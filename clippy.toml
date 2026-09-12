@@ -1,0 +1,6 @@
+# Clippy (linting) configurations.
+
+allow-expect-in-tests = true           # Exempt `expect_used` in tests.
+allow-indexing-slicing-in-tests = true # Exempt `indexing_slicing` in tests.
+allow-panic-in-tests = true            # Exempt `panic` in tests.
+allow-unwrap-in-tests = true           # Exempt `unwrap_used` in tests.
