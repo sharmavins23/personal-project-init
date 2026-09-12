@@ -1,0 +1,81 @@
+//! Filesystem accessor function for checking whether a file exists.
+
+use crate::system_accessors::filesystem_accessors::filesystem_errors::file_exists_error_context;
+use color_eyre::eyre::{Context, Result};
+use std::path::Path;
+
+// ===== Accessor Code =========================================================
+
+/// Determines whether a file or directory exists at `path`.
+///
+/// # Parameters
+///
+/// - [`Path`] `path`: The file path to check.
+///
+/// # Returns
+///
+/// A [`Result`] which is:
+///
+/// - [`bool`]: Whether anything exists at the given path.
+/// - [`Err`]: Returns the file check error.
+///
+#[allow(dead_code)]
+pub(crate) fn file_exists(path: &Path) -> Result<bool> {
+    path.try_exists().wrap_err(file_exists_error_context(path))
+}
+
+// ===== Unit Testing ==========================================================
+
+/// Unit tests for file existence checks.
+#[cfg(test)]
+mod test_file_exists {
+
+    use super::file_exists;
+    use crate::system_accessors::filesystem_accessors::test_support::{
+        SAFE_FILENAME_CHARS, TestFile, create_test_file,
+    };
+    use color_eyre::eyre::Result;
+    use proptest::{prop_assert, proptest};
+    use std::path::PathBuf;
+
+    // ----- Test Cases --------------------------------------------------------
+
+    proptest! {
+
+        /// Missing files and directories must be reported as not existing.
+        #[test]
+        fn test_file_exists_false(file_name in SAFE_FILENAME_CHARS) {
+            // Arrange.
+            let test_file: TestFile = create_test_file(&file_name, None);
+            let missing_path: PathBuf = test_file.test_directory.path().join(&file_name);
+            let missing_directory_path: PathBuf =
+                test_file.test_directory.path().join("missing_directory");
+
+            // Act.
+            let missing_file_result: Result<bool> = file_exists(&missing_path);
+            let missing_directory_result: Result<bool> = file_exists(&missing_directory_path);
+
+            // Assert.
+            prop_assert!(!missing_file_result.expect("File existence check should succeed."));
+            prop_assert!(
+                !missing_directory_result.expect("Directory existence check should succeed.")
+            );
+        }
+
+        /// Seeded files and directories must be reported as existing.
+        #[test]
+        fn test_file_exists_true(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
+            // Arrange.
+            let test_file: TestFile = create_test_file(&file_name, Some(&file_content));
+
+            // Act.
+            let directory_exists_result: Result<bool> = file_exists(test_file.test_directory.path());
+            let file_exists_result: Result<bool> = file_exists(&test_file.file_path);
+
+            // Assert.
+            prop_assert!(directory_exists_result.expect("Directory existence check should succeed."));
+            prop_assert!(file_exists_result.expect("File existence check should succeed."));
+        }
+
+    }
+}
