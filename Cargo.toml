@@ -9,6 +9,7 @@ as_conversions = "deny"              # Disallows `as` casts.
 exit = "deny"                        # Disallows std::process::exit.
 expect_used = "deny"                 # Disallows `.expect()`.
 indexing_slicing = "deny"            # Disallows `v[i]` indexing.
+redundant_pub_crate = "allow"        # Allow explicit `pub(crate)` when redundant.
 panic = "deny"                       # Disallows the `panic!` macro.
 panic_in_result_fn = "deny"          # Disallows `panic!` inside Result-returning functions.
 string_slice = "deny"                # Disallows byte-indexing strings.
@@ -32,6 +33,11 @@ opt-level = 3     # Enable all compiler optimizations.
 strip = "symbols" # Strip symbols from the compiled binary.
 
 [dependencies]
+chrono = "0.4.45"
 clap = "4.6.6"
 color-eyre = "0.6.5"
 owo-colors = "4.4.0"
+
+[dev-dependencies]
+proptest = "1.11.0"
+tempfile = "3.27.0"
