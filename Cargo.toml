@@ -34,3 +34,4 @@ strip = "symbols" # Strip symbols from the compiled binary.
 [dependencies]
 clap = "4.6.6"
 color-eyre = "0.6.5"
+owo-colors = "4.4.0"

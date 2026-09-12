@@ -2,7 +2,10 @@
 target
 __pycache__
 
-# Editor files
+# Documentation/scratchwork
+scratch
+
+# Editor configuration files
 .vscode
 
 # Operating system files
