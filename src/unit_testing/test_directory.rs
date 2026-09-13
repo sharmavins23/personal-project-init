@@ -1,6 +1,6 @@
 //! Test fixture for creating (temporary) test directories.
 
-use std::{fs::create_dir, path::PathBuf};
+use std::{fs::create_dir_all, path::PathBuf};
 use tempfile::{TempDir, tempdir};
 
 // ===== Fixture Constants =====================================================
@@ -38,11 +38,12 @@ pub(crate) struct TestDirectory {
 #[cfg(test)]
 pub(crate) fn create_test_directory(directory_name: &str) -> TestDirectory {
     // Create the root test directory.
+
     let test_directory: TempDir = tempdir().expect("Failed to create test directory.");
 
     // Create the nested directory path.
     let directory_path: PathBuf = test_directory.path().join(directory_name);
-    create_dir(&directory_path).expect("Failed to create nested test directory.");
+    create_dir_all(&directory_path).expect("Failed to create nested test directory.");
 
     TestDirectory {
         directory_path,
