@@ -34,7 +34,10 @@ pub(crate) fn build_license(git_user: &str) -> String {
 #[cfg(test)]
 mod test_build_license {
 
-    use super::{GIT_USER_PLACEHOLDER, YEAR_PLACEHOLDER_MARKER, build_license};
+    use crate::template_formatters::{
+        build_license,
+        build_license::{GIT_USER_PLACEHOLDER, YEAR_PLACEHOLDER_MARKER},
+    };
     use chrono::{Datelike, Local};
     use proptest::{prop_assert, proptest};
 

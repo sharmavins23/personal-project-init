@@ -36,9 +36,11 @@ pub(crate) fn git_init(path: &Path) -> Result<Repository> {
 #[cfg(test)]
 mod test_git_init {
 
-    use super::git_init;
-    use crate::unit_testing::test_directory::{
-        SAFE_DIRECTORY_CHARS, TestDirectory, create_test_directory,
+    use crate::{
+        system_accessors::git_accessors::git_init,
+        unit_testing::test_directory::{
+            SAFE_DIRECTORY_CHARS, TestDirectory, create_test_directory,
+        },
     };
     use color_eyre::eyre::Result;
     use gix::Repository;

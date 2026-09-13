@@ -31,8 +31,10 @@ pub(crate) fn write_file(path: &Path, file_content: &str) -> Result<()> {
 #[cfg(test)]
 mod test_write_file {
 
-    use super::write_file;
-    use crate::unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file};
+    use crate::{
+        system_accessors::filesystem_accessors::write_file,
+        unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file},
+    };
     use proptest::{prop_assert_eq, proptest};
     use std::fs::read_to_string;
 

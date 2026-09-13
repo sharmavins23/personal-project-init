@@ -26,9 +26,11 @@ pub(crate) fn get_current_directory() -> Result<PathBuf> {
 #[cfg(test)]
 mod test_get_current_directory {
 
-    use super::get_current_directory;
-    use crate::unit_testing::test_directory::{
-        SAFE_DIRECTORY_CHARS, TestDirectory, create_test_directory,
+    use crate::{
+        system_accessors::filesystem_accessors::get_current_directory,
+        unit_testing::test_directory::{
+            SAFE_DIRECTORY_CHARS, TestDirectory, create_test_directory,
+        },
     };
     use color_eyre::eyre::Result;
     use proptest::{prop_assert_eq, proptest};

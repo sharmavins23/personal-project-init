@@ -30,8 +30,10 @@ pub(crate) fn read_file(path: &Path) -> Result<String> {
 #[cfg(test)]
 mod test_read_file {
 
-    use super::read_file;
-    use crate::unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file};
+    use crate::{
+        system_accessors::filesystem_accessors::read_file,
+        unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file},
+    };
     use color_eyre::eyre::Result;
     use proptest::{prop_assert_eq, proptest};
 

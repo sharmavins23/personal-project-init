@@ -2,9 +2,7 @@
 
 use crate::system_accessors::filesystem_accessors::filesystem_errors::file_read_error_context;
 use color_eyre::eyre::{Context, Result};
-use std::fs::read_to_string;
-use std::io::ErrorKind::NotFound;
-use std::path::Path;
+use std::{fs::read_to_string, io::ErrorKind::NotFound, path::Path};
 
 // ===== Accessor Code =========================================================
 
@@ -51,8 +49,10 @@ pub(crate) fn read_file_if_exists(path: &Path) -> Result<Option<String>> {
 #[cfg(test)]
 mod test_read_file_if_exists {
 
-    use super::read_file_if_exists;
-    use crate::unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file};
+    use crate::{
+        system_accessors::filesystem_accessors::read_file_if_exists,
+        unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file},
+    };
     use color_eyre::eyre::Result;
     use proptest::{prop_assert, prop_assert_eq, proptest};
 

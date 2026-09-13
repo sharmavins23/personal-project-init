@@ -30,8 +30,10 @@ pub(crate) fn file_exists(path: &Path) -> Result<bool> {
 #[cfg(test)]
 mod test_file_exists {
 
-    use super::file_exists;
-    use crate::unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file};
+    use crate::{
+        system_accessors::filesystem_accessors::file_exists,
+        unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file},
+    };
     use color_eyre::eyre::Result;
     use proptest::{prop_assert, proptest};
     use std::path::PathBuf;
