@@ -1,21 +1,24 @@
-//! Supports for filesystem accessor unit testing.
+//! Test fixture for creating (temporary) test files.
 
 use std::path::PathBuf;
 use tempfile::{TempDir, tempdir};
 
-/// A filename-safe character class, for proptest generation.
-pub(in crate::system_accessors::filesystem_accessors) const SAFE_FILENAME_CHARS: &str =
-    "[a-zA-Z0-9][a-zA-Z0-9_.-]{0,31}";
+// ===== Fixture Constants =====================================================
 
-// ===== Type Definitions ======================================================
+/// A filename-safe character class, for proptest generation.
+#[cfg(test)]
+pub(crate) const SAFE_FILENAME_CHARS: &str = "[a-zA-Z0-9][a-zA-Z0-9_.-]{0,31}";
+
+// ===== Fixture Models ========================================================
 
 /// Stores a (temporary) file path and directory, used for testing.
-pub(in crate::system_accessors::filesystem_accessors) struct TestFile {
+#[cfg(test)]
+pub(crate) struct TestFile {
     /// The full path to the test file.
-    pub(in crate::system_accessors::filesystem_accessors) file_path: PathBuf,
+    pub(crate) file_path: PathBuf,
     /// Test directory.
     #[allow(dead_code)]
-    pub(in crate::system_accessors::filesystem_accessors) test_directory: TempDir,
+    pub(crate) test_directory: TempDir,
 }
 
 // ===== Fixture Functions =====================================================
@@ -24,18 +27,16 @@ pub(in crate::system_accessors::filesystem_accessors) struct TestFile {
 ///
 /// # Parameters
 ///
-/// - [`str`] `file_name`: The name of the file to create.
 /// - [`Option<&str>`] `file_content`: Contents to populate the file with,
 ///   if provided. If empty, the file will not be created.
+/// - [`str`] `file_name`: The name of the file to create.
 ///
 /// # Returns
 ///
 /// A [`TestFile`] object holding the directory and file path.
 ///
-pub(in crate::system_accessors::filesystem_accessors) fn create_test_file(
-    file_name: &str,
-    file_content: Option<&str>,
-) -> TestFile {
+#[cfg(test)]
+pub(crate) fn create_test_file(file_content: Option<&str>, file_name: &str) -> TestFile {
     // Create the test directory.
     let test_directory: TempDir = tempdir().expect("Failed to create test directory.");
 

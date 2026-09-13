@@ -1,21 +1,24 @@
-//! Supports for git accessor unit testing.
+//! Test fixture for creating (temporary) test directories.
 
-use std::path::PathBuf;
+use std::{fs::create_dir, path::PathBuf};
 use tempfile::{TempDir, tempdir};
 
-/// A directory-safe character class, for proptest generation.
-pub(in crate::system_accessors::git_accessors) const SAFE_DIRECTORY_CHARS: &str =
-    "[a-zA-Z0-9]{1,32}";
+// ===== Fixture Constants =====================================================
 
-// ===== Type Definitions ======================================================
+/// A directory-safe character class, for proptest generation.
+#[cfg(test)]
+pub(crate) const SAFE_DIRECTORY_CHARS: &str = "[a-zA-Z0-9]{1,32}";
+
+// ===== Fixture Models ========================================================
 
 /// Stores a (temporary) directory path and directory, used for testing.
-pub(in crate::system_accessors::git_accessors) struct TestDirectory {
+#[cfg(test)]
+pub(crate) struct TestDirectory {
     /// The full path to the test directory.
-    pub(in crate::system_accessors::git_accessors) directory_path: PathBuf,
+    pub(crate) directory_path: PathBuf,
     /// Test directory.
     #[allow(dead_code)]
-    pub(in crate::system_accessors::git_accessors) test_directory: TempDir,
+    pub(crate) test_directory: TempDir,
 }
 
 // ===== Fixture Functions =====================================================
@@ -32,15 +35,14 @@ pub(in crate::system_accessors::git_accessors) struct TestDirectory {
 ///
 /// A [`TestDirectory`] object holding the directory and its path.
 ///
-pub(in crate::system_accessors::git_accessors) fn create_test_directory(
-    directory_name: &str,
-) -> TestDirectory {
+#[cfg(test)]
+pub(crate) fn create_test_directory(directory_name: &str) -> TestDirectory {
     // Create the root test directory.
     let test_directory: TempDir = tempdir().expect("Failed to create test directory.");
 
     // Create the nested directory path.
     let directory_path: PathBuf = test_directory.path().join(directory_name);
-    std::fs::create_dir_all(&directory_path).expect("Failed to create nested test directory.");
+    create_dir(&directory_path).expect("Failed to create nested test directory.");
 
     TestDirectory {
         directory_path,
