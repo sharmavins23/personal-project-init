@@ -5,7 +5,7 @@ use tempfile::{TempDir, tempdir};
 
 /// A directory-safe character class, for proptest generation.
 pub(in crate::system_accessors::git_accessors) const SAFE_DIRECTORY_CHARS: &str =
-    "[a-zA-Z0-9][a-zA-Z0-9_.-]{0,31}";
+    "[a-zA-Z0-9]{1,32}";
 
 // ===== Type Definitions ======================================================
 
