@@ -1,0 +1,6 @@
+# Documentation/scratchwork
+scratch
+
+# Editor configuration files
+.git
+.vscode
