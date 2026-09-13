@@ -6,6 +6,10 @@ pub(crate) mod file_exists;
 #[allow(unused_imports)]
 pub(crate) use file_exists::file_exists;
 
+pub(crate) mod get_current_directory;
+#[allow(unused_imports)]
+pub(crate) use get_current_directory::get_current_directory;
+
 pub(crate) mod read_file_if_exists;
 #[allow(unused_imports)]
 pub(crate) use read_file_if_exists::read_file_if_exists;
@@ -21,8 +25,3 @@ pub(crate) use write_file::write_file;
 // ===== Helpers ===============================================================
 
 pub(in crate::system_accessors::filesystem_accessors) mod filesystem_errors;
-
-// ===== Test Support ==========================================================
-
-#[cfg(test)]
-pub(in crate::system_accessors::filesystem_accessors) mod test_support;
