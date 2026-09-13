@@ -62,9 +62,25 @@ mod test_read_file_if_exists {
 
     proptest! {
 
-        /// Reading a missing file must return nothing, not an error.
+        /// Reading an existing file must return its content.
         #[test]
-        fn missing_file_yields_none(file_name in SAFE_FILENAME_CHARS) {
+        fn existing_file_returns_content(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
+            // Arrange.
+            let test_file: TestFile = create_test_file(&file_name, Some(file_content.as_str()));
+
+            // Act.
+            let result: Result<Option<String>> = read_file_if_exists(&test_file.file_path);
+
+            // Assert.
+            let returned_content: Option<String> =
+                result.expect("File read should succeed on an existing file.");
+            prop_assert!(returned_content.is_some());
+            prop_assert_eq!(returned_content.expect("Contents should be present."), file_content);
+        }
+
+        /// Reading a missing file must return nothing (and not an error).
+        #[test]
+        fn missing_file_returns_nothing(file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
             let test_file: TestFile = create_test_file(&file_name, None);
 
@@ -77,22 +93,6 @@ mod test_read_file_if_exists {
                     .expect("Read should succeed for a missing file.")
                     .is_none()
             );
-        }
-
-        /// Fuzz test containing various files and names.
-        #[test]
-        fn test_read_file_if_exists(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
-            // Arrange.
-            let test_file: TestFile = create_test_file(&file_name, Some(file_content.as_str()));
-
-            // Act.
-            let result: Result<Option<String>> = read_file_if_exists(&test_file.file_path);
-
-            // Assert.
-            let returned_content: Option<String> =
-                result.expect("File read should succeed on an existing file.");
-            prop_assert!(returned_content.is_some());
-            prop_assert_eq!(returned_content.expect("Contents should be present."), file_content);
         }
 
     }

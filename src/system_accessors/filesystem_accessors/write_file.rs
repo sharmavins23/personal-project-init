@@ -45,7 +45,7 @@ mod test_write_file {
 
         /// Any items written to files must read back, verbatim.
         #[test]
-        fn test_write_file(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
+        fn written_file_succeeds(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
             let test_file: TestFile = create_test_file(&file_name, None);
 

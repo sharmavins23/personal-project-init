@@ -50,7 +50,7 @@ mod test_git_init {
 
         /// Initialization always lands `.git` at exactly the requested path.
         #[test]
-        fn test_git_init(directory_name in SAFE_DIRECTORY_CHARS) {
+        fn init_succeeds(directory_name in SAFE_DIRECTORY_CHARS) {
             // Arrange.
             let test_directory: TestDirectory = create_test_directory(&directory_name);
 
@@ -65,7 +65,7 @@ mod test_git_init {
 
         /// Re-initialization should not fail.
         #[test]
-        fn test_git_init_idempotency(directory_name in SAFE_DIRECTORY_CHARS) {
+        fn idempotent_init_succeeds(directory_name in SAFE_DIRECTORY_CHARS) {
             // Arrange.
             let test_directory: TestDirectory = create_test_directory(&directory_name);
 

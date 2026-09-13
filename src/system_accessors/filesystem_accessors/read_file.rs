@@ -42,9 +42,9 @@ mod test_read_file {
 
     proptest! {
 
-        /// Fuzz test containing various files and names.
+        /// Reading a file must return its contents.
         #[test]
-        fn test_read_file(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
+        fn existing_file_returns_content(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
             let test_file: TestFile = create_test_file(&file_name, Some(file_content.as_str()));
 
