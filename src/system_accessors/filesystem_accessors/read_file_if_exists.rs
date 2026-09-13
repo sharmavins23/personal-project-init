@@ -52,9 +52,7 @@ pub(crate) fn read_file_if_exists(path: &Path) -> Result<Option<String>> {
 mod test_read_file_if_exists {
 
     use super::read_file_if_exists;
-    use crate::system_accessors::filesystem_accessors::test_support::{
-        SAFE_FILENAME_CHARS, TestFile, create_test_file,
-    };
+    use crate::unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file};
     use color_eyre::eyre::Result;
     use proptest::{prop_assert, prop_assert_eq, proptest};
 
@@ -66,7 +64,7 @@ mod test_read_file_if_exists {
         #[test]
         fn existing_file_returns_content(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(&file_name, Some(file_content.as_str()));
+            let test_file: TestFile = create_test_file(Some(file_content.as_str()), &file_name);
 
             // Act.
             let result: Result<Option<String>> = read_file_if_exists(&test_file.file_path);
@@ -82,7 +80,7 @@ mod test_read_file_if_exists {
         #[test]
         fn missing_file_returns_nothing(file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(&file_name, None);
+            let test_file: TestFile = create_test_file(None, &file_name);
 
             // Act.
             let result: Result<Option<String>> = read_file_if_exists(&test_file.file_path);

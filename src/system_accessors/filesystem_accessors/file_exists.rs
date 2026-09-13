@@ -31,9 +31,7 @@ pub(crate) fn file_exists(path: &Path) -> Result<bool> {
 mod test_file_exists {
 
     use super::file_exists;
-    use crate::system_accessors::filesystem_accessors::test_support::{
-        SAFE_FILENAME_CHARS, TestFile, create_test_file,
-    };
+    use crate::unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file};
     use color_eyre::eyre::Result;
     use proptest::{prop_assert, proptest};
     use std::path::PathBuf;
@@ -46,7 +44,7 @@ mod test_file_exists {
         #[test]
         fn existing_file_reports_existing(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(&file_name, Some(&file_content));
+            let test_file: TestFile = create_test_file(Some(&file_content), &file_name);
 
             // Act.
             let directory_exists_result: Result<bool> = file_exists(test_file.test_directory.path());
@@ -61,7 +59,7 @@ mod test_file_exists {
         #[test]
         fn missing_file_reports_not_existing(file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(&file_name, None);
+            let test_file: TestFile = create_test_file(None, &file_name);
             let missing_path: PathBuf = test_file.test_directory.path().join(&file_name);
             let missing_directory_path: PathBuf =
                 test_file.test_directory.path().join("missing_directory");

@@ -2,8 +2,7 @@
 
 use crate::system_accessors::filesystem_accessors::filesystem_errors::file_read_error_context;
 use color_eyre::eyre::{Context, Result};
-use std::fs::read_to_string;
-use std::path::Path;
+use std::{fs::read_to_string, path::Path};
 
 // ===== Accessor Code =========================================================
 
@@ -32,9 +31,7 @@ pub(crate) fn read_file(path: &Path) -> Result<String> {
 mod test_read_file {
 
     use super::read_file;
-    use crate::system_accessors::filesystem_accessors::test_support::{
-        SAFE_FILENAME_CHARS, TestFile, create_test_file,
-    };
+    use crate::unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file};
     use color_eyre::eyre::Result;
     use proptest::{prop_assert_eq, proptest};
 
@@ -46,7 +43,7 @@ mod test_read_file {
         #[test]
         fn existing_file_returns_content(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(&file_name, Some(file_content.as_str()));
+            let test_file: TestFile = create_test_file(Some(file_content.as_str()), &file_name);
 
             // Act.
             let result: Result<String> = read_file(&test_file.file_path);

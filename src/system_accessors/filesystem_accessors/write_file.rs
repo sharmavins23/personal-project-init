@@ -2,8 +2,7 @@
 
 use crate::system_accessors::filesystem_accessors::filesystem_errors::file_write_error_context;
 use color_eyre::eyre::{Context, Result};
-use std::fs::write;
-use std::path::Path;
+use std::{fs::write, path::Path};
 
 // ===== Accessor Code =========================================================
 
@@ -33,9 +32,7 @@ pub(crate) fn write_file(path: &Path, file_content: &str) -> Result<()> {
 mod test_write_file {
 
     use super::write_file;
-    use crate::system_accessors::filesystem_accessors::test_support::{
-        SAFE_FILENAME_CHARS, TestFile, create_test_file,
-    };
+    use crate::unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file};
     use proptest::{prop_assert_eq, proptest};
     use std::fs::read_to_string;
 
@@ -47,7 +44,7 @@ mod test_write_file {
         #[test]
         fn written_file_succeeds(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(&file_name, None);
+            let test_file: TestFile = create_test_file(None, &file_name);
 
             // Act.
             write_file(&test_file.file_path, file_content.as_str())

@@ -17,7 +17,7 @@ use std::path::Path;
 pub(in crate::system_accessors::filesystem_accessors) fn file_exists_error_context(
     path: &Path,
 ) -> String {
-    let context: String = format!("Failed to check existence of file at {}", path.display());
+    let context: String = format!("Failed to check existence of file at `{}`.", path.display());
 
     context
 }
@@ -35,7 +35,7 @@ pub(in crate::system_accessors::filesystem_accessors) fn file_exists_error_conte
 pub(in crate::system_accessors::filesystem_accessors) fn file_read_error_context(
     path: &Path,
 ) -> String {
-    let context: String = format!("Failed to read file at {}", path.display());
+    let context: String = format!("Failed to read file at `{}`.", path.display());
 
     context
 }
@@ -53,7 +53,20 @@ pub(in crate::system_accessors::filesystem_accessors) fn file_read_error_context
 pub(in crate::system_accessors::filesystem_accessors) fn file_write_error_context(
     path: &Path,
 ) -> String {
-    let context: String = format!("Failed to write file at {}", path.display());
+    let context: String = format!("Failed to write file at `{}`.", path.display());
+
+    context
+}
+
+/// Adds context on working directory lookup errors.
+///
+/// # Returns
+///
+/// - `String`: The context, which can be used to form detailed error messages.
+///
+pub(in crate::system_accessors::filesystem_accessors) fn get_current_directory_error_context()
+-> String {
+    let context: String = String::from("Failed to determine the current (working) directory.");
 
     context
 }
