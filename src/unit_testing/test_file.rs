@@ -1,6 +1,6 @@
 //! Test fixture for creating (temporary) test files.
 
-use std::path::PathBuf;
+use std::{fs::write, path::PathBuf};
 use tempfile::{TempDir, tempdir};
 
 // ===== Fixture Constants =====================================================
@@ -49,7 +49,7 @@ pub(crate) fn create_test_file(file_content: Option<&str>, file_name: &str) -> T
 
     // If `file_content` is specified, write to the file.
     if let Some(provided_file_content) = file_content {
-        std::fs::write(&file_path, provided_file_content)
+        write(&file_path, provided_file_content)
             .expect("Failed to seed test file with provided content.");
     }
 
