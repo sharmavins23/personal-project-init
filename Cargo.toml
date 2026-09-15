@@ -36,7 +36,7 @@ strip = "symbols" # Strip symbols from the compiled binary.
 chrono = "0.4.45"
 clap = "4.6.6"
 color-eyre = "0.6.5"
-gix = "0.87.1"
+git2 = "0.21.0"
 owo-colors = "4.4.0"
 
 [dev-dependencies]

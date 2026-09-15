@@ -2,7 +2,7 @@
 
 use crate::system_accessors::git_accessors::git_errors::git_init_error_context;
 use color_eyre::eyre::{Context, Result};
-use gix::{Repository, init, open};
+use git2::Repository;
 use std::path::Path;
 
 // ===== Accessor Code =========================================================
@@ -23,11 +23,11 @@ use std::path::Path;
 ///
 #[allow(dead_code)]
 pub(crate) fn git_init(path: &Path) -> Result<Repository> {
-    if let Ok(repository) = open(path) {
+    if let Ok(repository) = Repository::open(path) {
         return Ok(repository);
     }
 
-    init(path).wrap_err(git_init_error_context(path))
+    Repository::init(path).wrap_err(git_init_error_context(path))
 }
 
 // ===== Unit Testing ==========================================================
@@ -43,7 +43,7 @@ mod test_git_init {
         },
     };
     use color_eyre::eyre::Result;
-    use gix::Repository;
+    use git2::Repository;
     use proptest::{prop_assert, proptest};
 
     // ----- Test Cases --------------------------------------------------------
