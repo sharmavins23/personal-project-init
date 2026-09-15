@@ -9,7 +9,7 @@ const LICENSE_TEMPLATE: &str =
     include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/data/LICENSE.md"));
 
 /// Placeholder locator for the git user's name.
-const GIT_USER_PLACEHOLDER: &str = "{{GIT_USER}}";
+const GIT_USER_PLACEHOLDER_MARKER: &str = "{{GIT_USER}}";
 
 /// Placeholder locator for the current year.
 const YEAR_PLACEHOLDER_MARKER: &str = "{{YEAR}}";
@@ -24,7 +24,7 @@ pub(crate) fn build_license(git_user: &str) -> String {
 
     // Substitute placeholders with their values.
     LICENSE_TEMPLATE
-        .replace(GIT_USER_PLACEHOLDER, git_user)
+        .replace(GIT_USER_PLACEHOLDER_MARKER, git_user)
         .replace(YEAR_PLACEHOLDER_MARKER, &current_year.to_string())
 }
 
@@ -36,7 +36,7 @@ mod test_build_license {
 
     use crate::template_formatters::{
         build_license,
-        build_license::{GIT_USER_PLACEHOLDER, YEAR_PLACEHOLDER_MARKER},
+        build_license::{GIT_USER_PLACEHOLDER_MARKER, YEAR_PLACEHOLDER_MARKER},
     };
     use chrono::{Datelike, Local};
     use proptest::{prop_assert, proptest};
@@ -58,7 +58,7 @@ mod test_build_license {
             prop_assert!(result.contains(&current_year));
             prop_assert!(!result.contains(YEAR_PLACEHOLDER_MARKER));
             prop_assert!(result.contains(&git_user));
-            prop_assert!(!result.contains(GIT_USER_PLACEHOLDER));
+            prop_assert!(!result.contains(GIT_USER_PLACEHOLDER_MARKER));
 
         }
 

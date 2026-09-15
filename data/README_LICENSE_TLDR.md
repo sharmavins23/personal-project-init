@@ -1,5 +1,3 @@
-# {{PROJECT_TITLE}}
-
 # License TL;DR
 
 This project is distributed under the MIT license. This is a paraphrasing of a
