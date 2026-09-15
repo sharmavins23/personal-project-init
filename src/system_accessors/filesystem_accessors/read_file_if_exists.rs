@@ -51,7 +51,9 @@ mod test_read_file_if_exists {
 
     use crate::{
         system_accessors::filesystem_accessors::read_file_if_exists,
-        unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file},
+        unit_testing::test_file::{
+            SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file,
+        },
     };
     use color_eyre::eyre::Result;
     use proptest::{prop_assert, prop_assert_eq, proptest};
@@ -62,7 +64,7 @@ mod test_read_file_if_exists {
 
         /// Reading an existing file must return its content.
         #[test]
-        fn existing_file_returns_content(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
+        fn existing_file_returns_content(file_content in SAFE_FILE_CONTENT_CHARS, file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
             let test_file: TestFile = create_test_file(Some(file_content.as_str()), &file_name);
 

@@ -34,8 +34,12 @@ pub(crate) fn build_readme_project_title(project_title: &str) -> String {
 #[cfg(test)]
 mod test_build_readme_project_title {
 
-    use crate::template_formatters::{
-        build_readme_project_title, build_readme_project_title::PROJECT_TITLE_PLACEHOLDER_MARKER,
+    use crate::{
+        template_formatters::{
+            build_readme_project_title,
+            build_readme_project_title::PROJECT_TITLE_PLACEHOLDER_MARKER,
+        },
+        unit_testing::test_file::SAFE_FILE_CONTENT_CHARS,
     };
     use proptest::{prop_assert, proptest};
 
@@ -45,7 +49,7 @@ mod test_build_readme_project_title {
 
         /// Project title must land in the output.
         #[test]
-        fn substitutes_any_project_title(project_title in ".*") {
+        fn substitutes_any_project_title(project_title in SAFE_FILE_CONTENT_CHARS) {
             // Act.
             let result: String = build_readme_project_title(&project_title);
 

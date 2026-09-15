@@ -7,7 +7,11 @@ use tempfile::{TempDir, tempdir};
 
 /// A filename-safe character class, for proptest generation.
 #[cfg(test)]
-pub(crate) const SAFE_FILENAME_CHARS: &str = "[a-zA-Z0-9][a-zA-Z0-9_.-]{0,31}";
+pub(crate) const SAFE_FILENAME_CHARS: &str = "[a-zA-Z0-9]([a-zA-Z0-9_.-]{0,30}[a-zA-Z0-9])?";
+
+/// A file content-safe character class, for proptest generation.
+#[cfg(test)]
+pub(crate) const SAFE_FILE_CONTENT_CHARS: &str = ".*";
 
 // ===== Fixture Models ========================================================
 

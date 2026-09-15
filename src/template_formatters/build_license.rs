@@ -34,9 +34,12 @@ pub(crate) fn build_license(git_user: &str) -> String {
 #[cfg(test)]
 mod test_build_license {
 
-    use crate::template_formatters::{
-        build_license,
-        build_license::{GIT_USER_PLACEHOLDER_MARKER, YEAR_PLACEHOLDER_MARKER},
+    use crate::{
+        template_formatters::{
+            build_license,
+            build_license::{GIT_USER_PLACEHOLDER_MARKER, YEAR_PLACEHOLDER_MARKER},
+        },
+        unit_testing::test_file::SAFE_FILE_CONTENT_CHARS,
     };
     use chrono::{Datelike, Local};
     use proptest::{prop_assert, proptest};
@@ -47,7 +50,7 @@ mod test_build_license {
 
         /// Git user and current year must both land in the output.
         #[test]
-        fn substitutes_user_and_year(git_user in ".*") {
+        fn substitutes_user_and_year(git_user in SAFE_FILE_CONTENT_CHARS) {
             // Arrange.
             let current_year: String = Local::now().year().to_string();
 

@@ -32,7 +32,9 @@ mod test_file_exists {
 
     use crate::{
         system_accessors::filesystem_accessors::file_exists,
-        unit_testing::test_file::{SAFE_FILENAME_CHARS, TestFile, create_test_file},
+        unit_testing::test_file::{
+            SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file,
+        },
     };
     use color_eyre::eyre::Result;
     use proptest::{prop_assert, proptest};
@@ -44,7 +46,7 @@ mod test_file_exists {
 
         /// Seeded files and directories must be reported as existing.
         #[test]
-        fn existing_file_reports_existing(file_content in ".*", file_name in SAFE_FILENAME_CHARS) {
+        fn existing_file_reports_existing(file_content in SAFE_FILE_CONTENT_CHARS, file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
             let test_file: TestFile = create_test_file(Some(&file_content), &file_name);
 
