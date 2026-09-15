@@ -38,7 +38,6 @@ pub(crate) struct TestDirectory {
 #[cfg(test)]
 pub(crate) fn create_test_directory(directory_name: &str) -> TestDirectory {
     // Create the root test directory.
-
     let test_directory: TempDir = tempdir().expect("Failed to create test directory.");
 
     // Create the nested directory path.

@@ -51,8 +51,9 @@ mod test_read_file_if_exists {
 
     use crate::{
         system_accessors::filesystem_accessors::read_file_if_exists,
-        unit_testing::test_file::{
-            SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file,
+        unit_testing::{
+            test_directory::{SAFE_DIRECTORY_CHARS, TestDirectory, create_test_directory},
+            test_file::{SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file},
         },
     };
     use color_eyre::eyre::Result;
@@ -64,9 +65,10 @@ mod test_read_file_if_exists {
 
         /// Reading an existing file must return its content.
         #[test]
-        fn existing_file_returns_content(file_content in SAFE_FILE_CONTENT_CHARS, file_name in SAFE_FILENAME_CHARS) {
+        fn existing_file_returns_content(directory_name in SAFE_DIRECTORY_CHARS, file_content in SAFE_FILE_CONTENT_CHARS, file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(Some(file_content.as_str()), &file_name);
+            let test_directory: TestDirectory = create_test_directory(&directory_name);
+            let test_file: TestFile = create_test_file(Some(file_content.as_str()), &file_name, &test_directory);
 
             // Act.
             let result: Result<Option<String>> = read_file_if_exists(&test_file.file_path);
@@ -80,9 +82,10 @@ mod test_read_file_if_exists {
 
         /// Reading a missing file must return nothing (and not an error).
         #[test]
-        fn missing_file_returns_nothing(file_name in SAFE_FILENAME_CHARS) {
+        fn missing_file_returns_nothing(directory_name in SAFE_DIRECTORY_CHARS, file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(None, &file_name);
+            let test_directory: TestDirectory = create_test_directory(&directory_name);
+            let test_file: TestFile = create_test_file(None, &file_name, &test_directory);
 
             // Act.
             let result: Result<Option<String>> = read_file_if_exists(&test_file.file_path);

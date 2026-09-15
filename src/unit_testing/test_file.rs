@@ -1,7 +1,7 @@
 //! Test fixture for creating (temporary) test files.
 
+use crate::unit_testing::test_directory::TestDirectory;
 use std::{fs::write, path::PathBuf};
-use tempfile::{TempDir, tempdir};
 
 // ===== Fixture Constants =====================================================
 
@@ -20,9 +20,6 @@ pub(crate) const SAFE_FILE_CONTENT_CHARS: &str = ".*";
 pub(crate) struct TestFile {
     /// The full path to the test file.
     pub(crate) file_path: PathBuf,
-    /// Test directory.
-    #[allow(dead_code)]
-    pub(crate) test_directory: TempDir,
 }
 
 // ===== Fixture Functions =====================================================
@@ -40,12 +37,13 @@ pub(crate) struct TestFile {
 /// A [`TestFile`] object holding the directory and file path.
 ///
 #[cfg(test)]
-pub(crate) fn create_test_file(file_content: Option<&str>, file_name: &str) -> TestFile {
-    // Create the test directory.
-    let test_directory: TempDir = tempdir().expect("Failed to create test directory.");
-
-    // Create the included filepath.
-    let file_path: PathBuf = test_directory.path().join(file_name);
+pub(crate) fn create_test_file(
+    file_content: Option<&str>,
+    file_name: &str,
+    test_directory: &TestDirectory,
+) -> TestFile {
+    // Create the file within the nested directory path.
+    let file_path: PathBuf = test_directory.directory_path.join(file_name);
 
     // If `file_content` is specified, write to the file.
     if let Some(provided_file_content) = file_content {
@@ -53,8 +51,5 @@ pub(crate) fn create_test_file(file_content: Option<&str>, file_name: &str) -> T
             .expect("Failed to seed test file with provided content.");
     }
 
-    TestFile {
-        file_path,
-        test_directory,
-    }
+    TestFile { file_path }
 }

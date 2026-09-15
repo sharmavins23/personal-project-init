@@ -32,13 +32,13 @@ mod test_file_exists {
 
     use crate::{
         system_accessors::filesystem_accessors::file_exists,
-        unit_testing::test_file::{
-            SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file,
+        unit_testing::{
+            test_directory::{SAFE_DIRECTORY_CHARS, TestDirectory, create_test_directory},
+            test_file::{SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file},
         },
     };
     use color_eyre::eyre::Result;
     use proptest::{prop_assert, proptest};
-    use std::path::PathBuf;
 
     // ----- Test Cases --------------------------------------------------------
 
@@ -46,12 +46,13 @@ mod test_file_exists {
 
         /// Seeded files and directories must be reported as existing.
         #[test]
-        fn existing_file_reports_existing(file_content in SAFE_FILE_CONTENT_CHARS, file_name in SAFE_FILENAME_CHARS) {
+        fn existing_file_reports_existing(directory_name in SAFE_DIRECTORY_CHARS, file_content in SAFE_FILE_CONTENT_CHARS, file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(Some(&file_content), &file_name);
+            let test_directory: TestDirectory = create_test_directory(&directory_name);
+            let test_file: TestFile = create_test_file(Some(&file_content), &file_name, &test_directory);
 
             // Act.
-            let directory_exists_result: Result<bool> = file_exists(test_file.test_directory.path());
+            let directory_exists_result: Result<bool> = file_exists(&test_directory.directory_path);
             let file_exists_result: Result<bool> = file_exists(&test_file.file_path);
 
             // Assert.
@@ -61,22 +62,20 @@ mod test_file_exists {
 
         /// Missing files and directories must be reported as not existing.
         #[test]
-        fn missing_file_reports_not_existing(file_name in SAFE_FILENAME_CHARS) {
+        fn missing_file_reports_not_existing(directory_name in SAFE_DIRECTORY_CHARS, file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(None, &file_name);
-            let missing_path: PathBuf = test_file.test_directory.path().join(&file_name);
-            let missing_directory_path: PathBuf =
-                test_file.test_directory.path().join("missing_directory");
+            let test_directory: TestDirectory = create_test_directory(&directory_name);
+            let test_file: TestFile = create_test_file(None, &file_name, &test_directory);
 
             // Act.
-            let missing_file_result: Result<bool> = file_exists(&missing_path);
-            let missing_directory_result: Result<bool> = file_exists(&missing_directory_path);
+            let missing_directory_result: Result<bool> = file_exists(&test_directory.directory_path);
+            let missing_file_result: Result<bool> = file_exists(&test_file.file_path);
 
             // Assert.
-            prop_assert!(!missing_file_result.expect("File existence check should succeed."));
             prop_assert!(
-                !missing_directory_result.expect("Directory existence check should succeed.")
+                missing_directory_result.expect("Directory existence check should succeed.")
             );
+            prop_assert!(!missing_file_result.expect("File existence check should succeed."));
         }
 
     }

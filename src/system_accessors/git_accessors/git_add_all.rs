@@ -48,13 +48,14 @@ mod test_git_add_all {
 
     use crate::{
         system_accessors::git_accessors::git_add_all::git_add_all,
-        unit_testing::test_file::{
-            SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file,
+        unit_testing::{
+            test_directory::{SAFE_DIRECTORY_CHARS, TestDirectory, create_test_directory},
+            test_file::{SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file},
         },
     };
     use color_eyre::eyre::Result;
-    use git2::Repository;
-    use proptest::{prop_assert, proptest};
+    use git2::{Blob, IndexEntry, Repository};
+    use proptest::{prop_assert, prop_assert_eq, proptest};
     use std::path::Path;
 
     // ----- Test Cases --------------------------------------------------------
@@ -64,26 +65,30 @@ mod test_git_add_all {
         /// A written file must appear in the index after staging.
         #[test]
         fn staged_file_enters_index(
+            directory_name in SAFE_DIRECTORY_CHARS,
             file_content in SAFE_FILE_CONTENT_CHARS,
             file_name in SAFE_FILENAME_CHARS,
         ) {
             // Arrange.
-            let test_file: TestFile = create_test_file(Some(&file_content), &file_name);
-            let test_directory: &Path = test_file.test_directory.path();
-            Repository::init(test_directory).expect("Git init should succeed as expected.");
+            let test_directory: TestDirectory = create_test_directory(&directory_name);
+            let _test_file: TestFile = create_test_file(Some(&file_content), &file_name, &test_directory);
+            Repository::init(&test_directory.directory_path).expect("Git init should succeed as expected.");
 
             // Act.
-            let result: Result<()> = git_add_all(test_directory);
+            let result: Result<()> = git_add_all(&test_directory.directory_path);
 
             // Assert.
             prop_assert!(result.is_ok());
-
             let repository: Repository =
-                Repository::open(test_directory).expect("Repo should open.");
+                Repository::open(&test_directory.directory_path).expect("Repo should open.");
             let index = repository.index().expect("Index should open.");
-
-            // Index paths are repository-relative, not absolute.
-            prop_assert!(index.get_path(Path::new(&file_name), 0).is_some());
+            let entry: IndexEntry = index
+                .get_path(Path::new(&file_name), 0)
+                .expect("Staged file should be present in the index.");
+            let blob: Blob = repository
+                .find_blob(entry.id)
+                .expect("Staged blob should be readable.");
+            prop_assert_eq!(blob.content(), file_content.as_bytes());
         }
 
     }

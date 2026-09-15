@@ -33,8 +33,9 @@ mod test_write_file {
 
     use crate::{
         system_accessors::filesystem_accessors::write_file,
-        unit_testing::test_file::{
-            SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file,
+        unit_testing::{
+            test_directory::{SAFE_DIRECTORY_CHARS, TestDirectory, create_test_directory},
+            test_file::{SAFE_FILE_CONTENT_CHARS, SAFE_FILENAME_CHARS, TestFile, create_test_file},
         },
     };
     use proptest::{prop_assert_eq, proptest};
@@ -46,9 +47,10 @@ mod test_write_file {
 
         /// Any items written to files must read back, verbatim.
         #[test]
-        fn written_file_succeeds(file_content in SAFE_FILE_CONTENT_CHARS, file_name in SAFE_FILENAME_CHARS) {
+        fn written_file_succeeds(directory_name in SAFE_DIRECTORY_CHARS, file_content in SAFE_FILE_CONTENT_CHARS, file_name in SAFE_FILENAME_CHARS) {
             // Arrange.
-            let test_file: TestFile = create_test_file(None, &file_name);
+            let test_directory: TestDirectory = create_test_directory(&directory_name);
+            let test_file: TestFile = create_test_file(None, &file_name, &test_directory);
 
             // Act.
             write_file(&test_file.file_path, file_content.as_str())
