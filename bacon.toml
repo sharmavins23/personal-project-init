@@ -1,0 +1,3 @@
+[jobs.test]
+command = ["cargo", "nextest", "run"] # Configure the command for Bacon to run.
+watch = ["data", "src", "tests"]      # Refresh testing on file changes.
