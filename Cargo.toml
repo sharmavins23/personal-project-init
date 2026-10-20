@@ -37,6 +37,7 @@ chrono = "0.4.45"
 clap = "4.6.6"
 color-eyre = "0.6.5"
 git2 = "0.21.0"
+indoc = "2.0.8"
 owo-colors = "4.4.0"
 
 [dev-dependencies]

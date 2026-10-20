@@ -10,6 +10,10 @@ pub(crate) mod git_init;
 #[allow(unused_imports)]
 pub(crate) use git_init::git_init;
 
+pub(crate) mod git_signature;
+#[allow(unused_imports)]
+pub(crate) use git_signature::git_signature;
+
 // ===== Helpers ===============================================================
 
 pub(in crate::system_accessors::git_accessors) mod git_errors;
