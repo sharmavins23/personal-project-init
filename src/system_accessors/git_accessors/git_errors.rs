@@ -27,6 +27,27 @@ pub(in crate::system_accessors::git_accessors) fn git_add_all_error_context(
     context
 }
 
+/// Adds context on git commit errors.
+///
+/// # Parameters
+///
+/// - `repository`: The repository to report.
+///
+/// # Returns
+///
+/// - `String`: The context, which can be used to form detailed error messages.
+///
+pub(in crate::system_accessors::git_accessors) fn git_commit_error_context(
+    repository: &Repository,
+) -> String {
+    let context: String = format!(
+        "Failed to commit changes in the git repository at `{}`.",
+        repository.path().display()
+    );
+
+    context
+}
+
 /// Adds context on git initialization errors.
 ///
 /// # Parameters
@@ -39,7 +60,7 @@ pub(in crate::system_accessors::git_accessors) fn git_add_all_error_context(
 ///
 pub(in crate::system_accessors::git_accessors) fn git_init_error_context(path: &Path) -> String {
     let context: String = format!(
-        "Failed to initialize git repository at `{}`.",
+        "Failed to initialize a git repository at `{}`.",
         path.display()
     );
 
