@@ -25,4 +25,3 @@ const README_LICENSE_TLDR_TEMPLATE: &str = include_str!(concat!(
 pub(crate) const fn build_readme_license_tldr() -> &'static str {
     README_LICENSE_TLDR_TEMPLATE
 }
-
