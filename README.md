@@ -32,6 +32,7 @@ This `/bin/` folder is added to my PATH environment variable.
     - The current implementation is not very robust; It would be nicer to
       robustly handle certain cases (e.g. items are already defined, licenses
       are already populated).
+- Add support for automated updating.
 
 # License TL;DR
 
