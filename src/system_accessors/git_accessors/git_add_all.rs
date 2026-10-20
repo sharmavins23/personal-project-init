@@ -3,7 +3,6 @@
 use crate::system_accessors::git_accessors::git_errors::git_add_all_error_context;
 use color_eyre::eyre::{Context, Result};
 use git2::{Index, IndexAddOption, Repository};
-use std::path::Path;
 
 // ===== Accessor Code =========================================================
 
@@ -23,21 +22,21 @@ use std::path::Path;
 /// - [`Err`]: Returns the git staging error.
 ///
 #[allow(dead_code)]
-pub(crate) fn git_add_all(path: &Path) -> Result<()> {
-    // Open the repository and its index.
-    let repository: Repository =
-        Repository::open(path).wrap_err(git_add_all_error_context(path))?;
+pub(crate) fn git_add_all(repository: &Repository) -> Result<()> {
+    // Open the repository's index.
     let mut index: Index = repository
         .index()
-        .wrap_err(git_add_all_error_context(path))?;
+        .wrap_err(git_add_all_error_context(repository))?;
 
     // Stage every matching path.
     index
         .add_all(["*"], IndexAddOption::DEFAULT, None)
-        .wrap_err(git_add_all_error_context(path))?;
+        .wrap_err(git_add_all_error_context(repository))?;
 
     // Write the index back to `.git/index`.
-    index.write().wrap_err(git_add_all_error_context(path))
+    index
+        .write()
+        .wrap_err(git_add_all_error_context(repository))
 }
 
 // ===== Unit Testing ==========================================================
@@ -72,10 +71,10 @@ mod test_git_add_all {
             // Arrange.
             let test_directory: TestDirectory = create_test_directory(&directory_name);
             let _test_file: TestFile = create_test_file(Some(&file_content), &file_name, &test_directory);
-            Repository::init(&test_directory.directory_path).expect("Git init should succeed as expected.");
+            let repository: Repository = Repository::init(&test_directory.directory_path).expect("Git init should succeed as expected.");
 
             // Act.
-            let result: Result<()> = git_add_all(&test_directory.directory_path);
+            let result: Result<()> = git_add_all(&repository);
 
             // Assert.
             prop_assert!(result.is_ok());
